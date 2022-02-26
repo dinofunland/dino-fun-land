@@ -75,7 +75,7 @@ Matter.Runner.run(runner, engine);
 const players = [createPlayer(-10, -10, 'red'), createPlayer(20, -10, 'yellow')]
 Matter.Composite.add(engine.world, players);
 
-const platforms = generatePlatforms(30)
+const platforms = generatePlatforms(1000)
 Matter.Composite.add(engine.world, platforms);
 
 const playersInput = [
