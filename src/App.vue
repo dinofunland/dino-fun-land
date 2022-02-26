@@ -6,18 +6,26 @@ import * as Matter from 'matter-js'
 import { onMounted, ref } from 'vue';
 import { onKeyDown, onKeyUp } from '@vueuse/core'
 
-const getRndInteger = (min :number, max :number) => {
-  return Math.floor(Math.random() * (max - min) ) + min;
+const getRndInteger = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
 const createPlayer = (x: number, y: number): Matter.Body => {
-  return Matter.Bodies.rectangle(x, y, 10, 10, {
-    friction: 0.8
+  return Matter.Bodies.rectangle(x, y, 5, 10, {
+    friction: 1,
+    frictionStatic: 1,
+    frictionAir: 0,
+    inertia: Infinity,
+    render: {
+         fillStyle: 'red',
+         strokeStyle: 'blue',
+         lineWidth: 3
+    }
   });
 }
 
 const createPlatform = (x: number, y: number): Matter.Body => {
-  const body = Matter.Bodies.rectangle(x, y, 40, 1, {
+  const body = Matter.Bodies.rectangle(x, y, 40, 10, {
     isStatic: true
   })
   return body
@@ -26,8 +34,8 @@ const createPlatform = (x: number, y: number): Matter.Body => {
 const generatePlatforms = (count: number): Matter.Body[] => {
   const bodies: Matter.Body[] = []
 
-  for(let i = 0; i < count; i++){
-    bodies.push(createPlatform(getRndInteger(-100, 100), -i*30 + -30))
+  for (let i = 0; i < count; i++) {
+    bodies.push(createPlatform(getRndInteger(-100, 100), -i * 30 + -30))
   }
 
   return bodies
@@ -71,7 +79,7 @@ const playersInput = [
 
 onKeyDown(['a', 'A', 'd', 'D', 'w', 'W', 'ArrowLeft', 'ArrowRight', 'ArrowUp'], (e) => {
   e.preventDefault()
-  const power = 0.001
+  const powerJump = 5
   switch (e.code) {
     // Player 1
     case 'KeyA':
@@ -83,7 +91,11 @@ onKeyDown(['a', 'A', 'd', 'D', 'w', 'W', 'ArrowLeft', 'ArrowRight', 'ArrowUp'], 
       break;
     case 'KeyW':
       console.log('jump')
-      players[0].force.y = -power * 3
+      const player = players[0]
+      Matter.Body.setVelocity(player, {
+        x: player.velocity.x,
+        y: -powerJump
+      })
       break;
     // Player 2
     case 'ArrowLeft':
@@ -94,7 +106,11 @@ onKeyDown(['a', 'A', 'd', 'D', 'w', 'W', 'ArrowLeft', 'ArrowRight', 'ArrowUp'], 
       break;
     case 'ArrowUp':
       console.log('jump')
-      players[1].force.y = -power * 3
+      const player2 = players[1]
+      Matter.Body.setVelocity(player2, {
+        x: player2.velocity.x,
+        y: -powerJump
+      })
       break;
   }
 })
@@ -120,14 +136,49 @@ onKeyUp(['a', 'A', 'd', 'D', 'ArrowLeft', 'ArrowRight',], (e) => {
 })
 
 Matter.Events.on(runner, 'afterTick', (e) => {
-  const playerInputOne = players[0]
+  const power = 2;
+  const playerOne = players[0]
+  const playerInputOne = playersInput[0]
+  if (playerInputOne.left) {
+    Matter.Body.setVelocity(playerOne, {
+      x: -power,
+      y: playerOne.velocity.y
+    })
+  }
+  if (playerInputOne.right) {
+    Matter.Body.setVelocity(playerOne, {
+      x: power,
+      y: playerOne.velocity.y
+    })
+  }
+
+  const playerTwo = players[1]
+  const playerInputTwo = playersInput[1]
+  if (playerInputTwo.left) {
+    Matter.Body.setVelocity(playerTwo, {
+      x: -power,
+      y: playerTwo.velocity.y
+    })
+  }
+  if (playerInputTwo.right) {
+    Matter.Body.setVelocity(playerTwo, {
+      x: power,
+      y: playerTwo.velocity.y
+    })
+  }
+
 })
 
 onMounted(() => {
   // create a renderer
   const render = Matter.Render.create({
     element: gameCanvas.value,
-    engine: engine
+    engine: engine,
+        options: {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      wireframes: false // <-- important
+    }
   });
 
   // run the renderer
