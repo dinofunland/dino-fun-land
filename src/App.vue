@@ -191,8 +191,6 @@ onMounted(() => {
   Matter.Render.run(render);
 
   Matter.Events.on(engine, 'afterUpdate', () => {
-    const highestPlayer = players[0]
-    if (!highestPlayer) return
     Matter.Render.lookAt(render, players, {
       x: 100,
       y: 200
