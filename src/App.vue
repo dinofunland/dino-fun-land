@@ -6,25 +6,33 @@ import * as Matter from 'matter-js'
 import { onMounted, ref } from 'vue';
 import { onKeyDown, onKeyUp, useResizeObserver } from '@vueuse/core'
 
+  const platformCategory = 0x0001
+  const playerCategory = 0x0002
+
 const getRndInteger = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
 const createPlayer = (x: number, y: number, color: string): Matter.Body => {
   return Matter.Bodies.rectangle(x, y, 5, 10, {
-    friction: 1,
-    frictionStatic: 1,
-    frictionAir: 0,
+    friction: 0.4,
     inertia: Infinity,
     render: {
       fillStyle: color,
+    },
+    collisionFilter: {
+      category: playerCategory,
+      mask: platformCategory
     }
   });
 }
 
 const createPlatform = (x: number, y: number): Matter.Body => {
   const body = Matter.Bodies.rectangle(x, y, 40, 10, {
-    isStatic: true
+    isStatic: true,
+    collisionFilter: {
+      category: platformCategory
+    }
   })
   return body
 }
