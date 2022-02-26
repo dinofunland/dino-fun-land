@@ -69,9 +69,8 @@ const playersInput = [
 ]
 
 
-onKeyDown(['a', 'A', 's', 'D', 'w', 'W', 'ArrowLeft', 'ArrowRight', 'ArrowUp'], (e) => {
+onKeyDown(['a', 'A', 'd', 'D', 'w', 'W', 'ArrowLeft', 'ArrowRight', 'ArrowUp'], (e) => {
   e.preventDefault()
-  console.log(e)
   const power = 0.001
   switch (e.code) {
     // Player 1
@@ -100,11 +99,9 @@ onKeyDown(['a', 'A', 's', 'D', 'w', 'W', 'ArrowLeft', 'ArrowRight', 'ArrowUp'], 
   }
 })
 
-onKeyUp(['a', 'A', 's', 'D', 'ArrowLeft', 'ArrowRight',], (e) => {
+onKeyUp(['a', 'A', 'd', 'D', 'ArrowLeft', 'ArrowRight',], (e) => {
   e.preventDefault()
-  console.log('UP')
-  console.log(e)
-  switch (e.key) {
+  switch (e.code) {
     // Player 1
     case 'KeyA':
       playersInput[0].left = false
@@ -120,6 +117,10 @@ onKeyUp(['a', 'A', 's', 'D', 'ArrowLeft', 'ArrowRight',], (e) => {
       playersInput[1].right = false
       break;
   }
+})
+
+Matter.Events.on(runner, 'afterTick', (e) => {
+  const playerInputOne = players[0]
 })
 
 onMounted(() => {
