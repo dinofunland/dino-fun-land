@@ -44,11 +44,11 @@ const generatePlatforms = (count: number): Matter.Body[] => {
   const bodies: Matter.Body[] = []
 
   for (let i = 0; i < count; i++) {
-    bodies.push(createPlatform(getRndInteger(-100, 100), -i * 25 + -30))
+    bodies.push(createPlatform(getRndInteger(10, 100), -i * 25 + -30))
   }
 
   for (let i = 0; i < count; i++) {
-    bodies.push(createPlatform(getRndInteger(-150, 50), -i * 25 + -30))
+    bodies.push(createPlatform(getRndInteger(-100, -10), -i * 25 + -30))
   }
 
   return bodies
@@ -93,20 +93,17 @@ const playersInput = [
 
 
 onKeyDown(['a', 'A', 'd', 'D', 'w', 'W', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'Shift'], (e) => {
-  console.log(e)
   e.preventDefault()
   const powerJump = 5
   switch (e.code) {
     // Player 1
     case 'KeyA':
-      console.log('hi')
       playersInput[0].left = true
       break;
     case 'KeyD':
       playersInput[0].right = true
       break;
     case 'KeyW':
-      console.log('jump')
       const playerJumpPower = playersInput[0].shift ? powerJump + 1 : powerJump;
       const player = players[0]
       for (let platform of [ground, ...platforms]) {
@@ -131,7 +128,6 @@ onKeyDown(['a', 'A', 'd', 'D', 'w', 'W', 'ArrowLeft', 'ArrowRight', 'ArrowUp', '
       playersInput[1].right = true
       break;
     case 'ArrowUp':
-      console.log('jump')
       const playerJumpPower2 = playersInput[1].shift ? powerJump + 1 : powerJump;
       const player2 = players[1]
       for (let platform of [ground, ...platforms]) {
