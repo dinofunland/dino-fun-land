@@ -3,11 +3,21 @@
 </template>
 <script setup lang="ts">
 import * as Matter from 'matter-js'
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const game = ref<HTMLElement>()
 
 const render = ref<Matter.Render>()
+
+const createPlayer = (): Matter.Body => {
+  return Matter.Bodies.rectangle(400, 200, 80, 80, {
+    friction: 0.9
+  });
+}
+
+const createGround = (): Matter.Body => {
+  return Matter.Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+}
 
 onMounted(() => {
   console.log(game.value)
@@ -22,18 +32,15 @@ onMounted(() => {
     engine: engine
   });
 
+  const playerOne = createPlayer()
+  const playerTwo = createPlayer()
 
-  // create two boxes and a ground
-  var boxA = Matter.Bodies.rectangle(400, 200, 80, 80, {
-    friction: 2
-  });
-  var boxB = Matter.Bodies.rectangle(450, 50, 80, 80);
-  var ground = Matter.Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
-  console.log('test')
-  console.log('test')
+  var ground = createGround()
 
   // add all of the bodies to the world
-  Matter.Composite.add(engine.world, [boxA, boxB, ground]);
+  Matter.Composite.add(engine.world, ground);
+  Matter.Composite.add(engine.world, playerOne);
+  Matter.Composite.add(engine.world, playerTwo);
 
   // run the renderer
   Matter.Render.run(render.value);
