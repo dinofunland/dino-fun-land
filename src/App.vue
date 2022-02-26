@@ -44,7 +44,11 @@ const generatePlatforms = (count: number): Matter.Body[] => {
   const bodies: Matter.Body[] = []
 
   for (let i = 0; i < count; i++) {
-    bodies.push(createPlatform(getRndInteger(-100, 100), -i * 30 + -30))
+    bodies.push(createPlatform(getRndInteger(-100, 100), -i * 25 + -30))
+  }
+
+  for (let i = 0; i < count; i++) {
+    bodies.push(createPlatform(getRndInteger(-150, 50), -i * 25 + -30))
   }
 
   return bodies
@@ -77,16 +81,19 @@ Matter.Composite.add(engine.world, platforms);
 const playersInput = [
   {
     left: false,
-    right: false
+    right: false,
+    shift: false
   },
   {
     left: false,
-    right: false
+    right: false,
+    shift: false
   },
 ]
 
 
-onKeyDown(['a', 'A', 'd', 'D', 'w', 'W', 'ArrowLeft', 'ArrowRight', 'ArrowUp'], (e) => {
+onKeyDown(['a', 'A', 'd', 'D', 'w', 'W', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'Shift'], (e) => {
+  console.log(e)
   e.preventDefault()
   const powerJump = 5
   switch (e.code) {
@@ -100,18 +107,21 @@ onKeyDown(['a', 'A', 'd', 'D', 'w', 'W', 'ArrowLeft', 'ArrowRight', 'ArrowUp'], 
       break;
     case 'KeyW':
       console.log('jump')
+      const playerJumpPower = playersInput[0].shift ? powerJump + 1 : powerJump;
       const player = players[0]
       for (let platform of [ground, ...platforms]) {
         const doesCollide = Matter.SAT.collides(platform, player)
-        console.log(doesCollide)
         if (doesCollide) {
           Matter.Body.setVelocity(player, {
             x: player.velocity.x,
-            y: -powerJump
+            y: -playerJumpPower
           })
           break;
         }
       }
+      break;
+    case 'ShiftLeft':
+      playersInput[0].shift = true
       break;
     // Player 2
     case 'ArrowLeft':
@@ -122,16 +132,26 @@ onKeyDown(['a', 'A', 'd', 'D', 'w', 'W', 'ArrowLeft', 'ArrowRight', 'ArrowUp'], 
       break;
     case 'ArrowUp':
       console.log('jump')
+      const playerJumpPower2 = playersInput[1].shift ? powerJump + 1 : powerJump;
       const player2 = players[1]
-      Matter.Body.setVelocity(player2, {
-        x: player2.velocity.x,
-        y: -powerJump
-      })
+      for (let platform of [ground, ...platforms]) {
+        const doesCollide = Matter.SAT.collides(platform, player2)
+        if (doesCollide) {
+          Matter.Body.setVelocity(player2, {
+            x: player2.velocity.x,
+            y: -playerJumpPower2
+          })
+          break;
+        }
+      }
+      break;
+    case 'ShiftRight':
+      playersInput[1].shift = true
       break;
   }
 })
 
-onKeyUp(['a', 'A', 'd', 'D', 'ArrowLeft', 'ArrowRight',], (e) => {
+onKeyUp(['a', 'A', 'd', 'D', 'ArrowLeft', 'ArrowRight', 'Shift'], (e) => {
   e.preventDefault()
   switch (e.code) {
     // Player 1
@@ -141,12 +161,18 @@ onKeyUp(['a', 'A', 'd', 'D', 'ArrowLeft', 'ArrowRight',], (e) => {
     case 'KeyD':
       playersInput[0].right = false
       break;
+    case 'ShiftLeft':
+      playersInput[0].shift = false
+      break;
     // Player 2
     case 'ArrowLeft':
       playersInput[1].left = false
       break;
     case 'ArrowRight':
       playersInput[1].right = false
+      break;
+    case 'ShiftRight':
+      playersInput[1].shift = false
       break;
   }
 })
@@ -188,9 +214,6 @@ Matter.Events.on(runner, 'afterTick', (e) => {
     for (let platform of [ground, ...platforms]) {
       const doesCollide = Matter.SAT.collides(platform, player)
       if (doesCollide && ((platform.position.y - 2.5) > (player.position.y + 4.9))) {
-
-        console.log(platform.position.y)
-        console.log(player.position.y)
         player.friction = 1
         break;
       }
