@@ -7,16 +7,14 @@ import { onMounted, ref } from 'vue';
 
 const game = ref<HTMLElement>()
 
-const render = ref<Matter.Render>()
-
 const createPlayer = (): Matter.Body => {
-  return Matter.Bodies.rectangle(400, 200, 80, 80, {
+  return Matter.Bodies.rectangle(0, -10, 10, 10, {
     friction: 0.9
   });
 }
 
 const createGround = (): Matter.Body => {
-  return Matter.Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+  return Matter.Bodies.rectangle(0, 30, 1000, 60, { isStatic: true });
 }
 
 onMounted(() => {
@@ -27,29 +25,33 @@ onMounted(() => {
   var engine = Matter.Engine.create();
 
   // create a renderer
-  render.value = Matter.Render.create({
+  var render = Matter.Render.create({
     element: game.value,
     engine: engine
   });
 
-  const playerOne = createPlayer()
-  const playerTwo = createPlayer()
+  const players = [createPlayer(), createPlayer()]
 
   var ground = createGround()
 
   // add all of the bodies to the world
   Matter.Composite.add(engine.world, ground);
-  Matter.Composite.add(engine.world, playerOne);
-  Matter.Composite.add(engine.world, playerTwo);
+  Matter.Composite.add(engine.world, players);
 
   // run the renderer
-  Matter.Render.run(render.value);
+  Matter.Render.run(render);
 
   // create runner
   var runner = Matter.Runner.create();
 
   // run the engine
   Matter.Runner.run(runner, engine);
-  var x = 1
+  Matter.Events.on(engine, 'afterUpdate', () => {
+    const highestPlayer = players.reduce((max, game) => max.position.y > game.position.y ? max : game);
+    Matter.Render.lookAt(render, highestPlayer, {
+      x: 10,
+      y: 200
+    });
+  })
 })
 </script>
