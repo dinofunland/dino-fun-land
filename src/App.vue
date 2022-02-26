@@ -6,8 +6,8 @@ import * as Matter from 'matter-js'
 import { onMounted, ref } from 'vue';
 import { onKeyDown, onKeyUp, useResizeObserver } from '@vueuse/core'
 
-  const platformCategory = 0x0001
-  const playerCategory = 0x0002
+const platformCategory = 0x0001
+const playerCategory = 0x0002
 
 const getRndInteger = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -28,10 +28,13 @@ const createPlayer = (x: number, y: number, color: string): Matter.Body => {
 }
 
 const createPlatform = (x: number, y: number): Matter.Body => {
-  const body = Matter.Bodies.rectangle(x, y, 40, 10, {
+  const body = Matter.Bodies.rectangle(x, y, 40, 5, {
     isStatic: true,
     collisionFilter: {
       category: platformCategory
+    },
+    render: {
+      fillStyle: 'green'
     }
   })
   return body
@@ -65,7 +68,7 @@ const runner = Matter.Runner.create();
 // run the engine
 Matter.Runner.run(runner, engine);
 
-const players = [createPlayer(-10, -10, 'red'), createPlayer(20, -10, 'green')]
+const players = [createPlayer(-10, -10, 'red'), createPlayer(20, -10, 'yellow')]
 Matter.Composite.add(engine.world, players);
 
 const platforms = generatePlatforms(30)
@@ -98,10 +101,17 @@ onKeyDown(['a', 'A', 'd', 'D', 'w', 'W', 'ArrowLeft', 'ArrowRight', 'ArrowUp'], 
     case 'KeyW':
       console.log('jump')
       const player = players[0]
-      Matter.Body.setVelocity(player, {
-        x: player.velocity.x,
-        y: -powerJump
-      })
+      for (let platform of [ground, ...platforms]) {
+        const doesCollide = Matter.SAT.collides(platform, player)
+        console.log(doesCollide)
+        if (doesCollide) {
+          Matter.Body.setVelocity(player, {
+            x: player.velocity.x,
+            y: -powerJump
+          })
+          break;
+        }
+      }
       break;
     // Player 2
     case 'ArrowLeft':
@@ -183,7 +193,8 @@ onMounted(() => {
     options: {
       width: gameCanvas.value?.offsetWidth,
       height: gameCanvas.value?.offsetHeight,
-      wireframes: false // <-- important
+      wireframes: false,
+      showDebug: true
     }
   });
 
@@ -198,7 +209,7 @@ onMounted(() => {
   })
 
   useResizeObserver(gameCanvas.value, (entries) => {
-    if(gameCanvas.value) {
+    if (gameCanvas.value) {
       const width = gameCanvas.value?.offsetWidth;
       const height = gameCanvas.value?.offsetHeight
 
