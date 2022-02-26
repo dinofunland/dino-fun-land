@@ -6,8 +6,8 @@ import * as Matter from 'matter-js'
 import { onMounted, ref } from 'vue';
 import { onKeyDown, onKeyUp, useResizeObserver } from '@vueuse/core'
 
-const platformCategory = 0x0001
-const playerCategory = 0x0002
+const platformCategory = 1
+const playerCategory = 2
 
 const getRndInteger = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -22,7 +22,7 @@ const createPlayer = (x: number, y: number, color: string): Matter.Body => {
     },
     collisionFilter: {
       category: playerCategory,
-      mask: platformCategory
+      mask: 1
     }
   });
 }
@@ -194,6 +194,11 @@ Matter.Events.on(runner, 'afterTick', (e) => {
         player.friction = 1
         break;
       }
+    }
+    if(player.velocity.y < 0) {
+      player.collisionFilter.mask = 0
+    } else {
+      player.collisionFilter.mask = 1
     }
   }
 
