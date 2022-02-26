@@ -15,7 +15,7 @@ const getRndInteger = (min: number, max: number) => {
 
 const createPlayer = (x: number, y: number, color: string): Matter.Body => {
   return Matter.Bodies.rectangle(x, y, 5, 10, {
-    friction: 0.4,
+    friction: 0,
     inertia: Infinity,
     render: {
       fillStyle: color,
@@ -51,7 +51,7 @@ const generatePlatforms = (count: number): Matter.Body[] => {
 }
 
 const createGround = (): Matter.Body => {
-  return Matter.Bodies.rectangle(0, 30, 1000, 60, { isStatic: true });
+  return Matter.Bodies.rectangle(0, 5, 1000, 10, { isStatic: true });
 }
 
 const gameCanvas = ref<HTMLElement>()
@@ -181,6 +181,20 @@ Matter.Events.on(runner, 'afterTick', (e) => {
       x: power,
       y: playerTwo.velocity.y
     })
+  }
+
+  for (let player of players) {
+    player.friction = 0
+    for (let platform of [ground, ...platforms]) {
+      const doesCollide = Matter.SAT.collides(platform, player)
+      if (doesCollide && ((platform.position.y - 2.5) > (player.position.y + 4.9))) {
+
+        console.log(platform.position.y)
+        console.log(player.position.y)
+        player.friction = 1
+        break;
+      }
+    }
   }
 
 })
