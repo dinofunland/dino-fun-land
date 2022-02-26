@@ -1,25 +1,23 @@
 <template>
-  <div ref="gameCanvas"></div>
+  <div class="game-canvas" ref="gameCanvas"></div>
 </template>
 <script setup lang="ts">
 import * as Matter from 'matter-js'
 import { onMounted, ref } from 'vue';
-import { onKeyDown, onKeyUp } from '@vueuse/core'
+import { onKeyDown, onKeyUp, useResizeObserver } from '@vueuse/core'
 
 const getRndInteger = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-const createPlayer = (x: number, y: number): Matter.Body => {
+const createPlayer = (x: number, y: number, color: string): Matter.Body => {
   return Matter.Bodies.rectangle(x, y, 5, 10, {
     friction: 1,
     frictionStatic: 1,
     frictionAir: 0,
     inertia: Infinity,
     render: {
-         fillStyle: 'red',
-         strokeStyle: 'blue',
-         lineWidth: 3
+      fillStyle: color,
     }
   });
 }
@@ -59,7 +57,7 @@ const runner = Matter.Runner.create();
 // run the engine
 Matter.Runner.run(runner, engine);
 
-const players = [createPlayer(-10, -10), createPlayer(20, -10)]
+const players = [createPlayer(-10, -10, 'red'), createPlayer(20, -10, 'green')]
 Matter.Composite.add(engine.world, players);
 
 const platforms = generatePlatforms(30)
@@ -174,9 +172,9 @@ onMounted(() => {
   const render = Matter.Render.create({
     element: gameCanvas.value,
     engine: engine,
-        options: {
-      width: window.innerWidth,
-      height: window.innerHeight,
+    options: {
+      width: gameCanvas.value?.offsetWidth,
+      height: gameCanvas.value?.offsetHeight,
       wireframes: false // <-- important
     }
   });
@@ -192,5 +190,30 @@ onMounted(() => {
       y: 400
     });
   })
+
+  useResizeObserver(gameCanvas.value, (entries) => {
+    if(gameCanvas.value) {
+      const width = gameCanvas.value?.offsetWidth;
+      const height = gameCanvas.value?.offsetHeight
+
+      render.bounds.max.x = width;
+      render.bounds.max.y = height;
+      render.options.width = width;
+      render.options.height = height;
+      render.canvas.width = width;
+      render.canvas.height = height;
+    }
+  })
 })
 </script>
+<style>
+html,
+body {
+  margin: 0;
+}
+
+.game-canvas {
+  width: 100vw;
+  height: 100vh;
+}
+</style>
