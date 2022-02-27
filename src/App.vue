@@ -217,7 +217,7 @@ Matter.Events.on(runner, 'afterTick', (e) => {
       const doesCollide = Matter.SAT.collides(platform, player)
       if (doesCollide && ((platform.position.y - 2.5) > (player.position.y + 4.9))) {
         playersInput[index].usedDoubleJump = false
-        player.friction = 1
+        player.friction = 0.9
         break;
       }
     }
@@ -227,7 +227,15 @@ Matter.Events.on(runner, 'afterTick', (e) => {
       player.collisionFilter.mask = 1
     }
   }
+  
+  for(let [index, value] of platforms.entries()) {
+    var isThirdIteration = (index + 1) % 3 === 0;
+    if(!isThirdIteration) continue
 
+    var px = 1 + 0 * Math.sin(engine.timing.timestamp * 0.0003);
+    Matter.Body.setVelocity(value, { x: px, y: value.velocity.y });
+    Matter.Body.setPosition(value, { x: value.position.x + px, y: value.position.y });
+  }
 })
 
 onMounted(() => {
