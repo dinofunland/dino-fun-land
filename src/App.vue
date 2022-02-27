@@ -44,11 +44,7 @@ const generatePlatforms = (count: number): Matter.Body[] => {
   const bodies: Matter.Body[] = []
 
   for (let i = 0; i < count; i++) {
-    bodies.push(createPlatform(getRndInteger(10, 100), -i * 25 + -30))
-  }
-
-  for (let i = 0; i < count; i++) {
-    bodies.push(createPlatform(getRndInteger(-100, -10), -i * 25 + -30))
+    bodies.push(createPlatform(getRndInteger(-60, 100), -i * 35 + -30))
   }
 
   return bodies
@@ -82,12 +78,14 @@ const playersInput = [
   {
     left: false,
     right: false,
-    shift: false
+    shift: false,
+    usedDoubleJump: false
   },
   {
     left: false,
     right: false,
-    shift: false
+    shift: false,
+    usedDoubleJump: false
   },
 ]
 
@@ -106,15 +104,23 @@ onKeyDown(['a', 'A', 'd', 'D', 'w', 'W', 'ArrowLeft', 'ArrowRight', 'ArrowUp', '
     case 'KeyW':
       const playerJumpPower = playersInput[0].shift ? powerJump + 1 : powerJump;
       const player = players[0]
+      let doesCollide;
+      const jump = () => {
+        Matter.Body.setVelocity(player, {
+          x: player.velocity.x,
+          y: -playerJumpPower
+        })
+      }
       for (let platform of [ground, ...platforms]) {
-        const doesCollide = Matter.SAT.collides(platform, player)
+        doesCollide = Matter.SAT.collides(platform, player)
         if (doesCollide) {
-          Matter.Body.setVelocity(player, {
-            x: player.velocity.x,
-            y: -playerJumpPower
-          })
+          jump()
           break;
         }
+      }
+      if(!doesCollide && !playersInput[0].usedDoubleJump) {
+        jump()
+        playersInput[0].usedDoubleJump = true
       }
       break;
     case 'ShiftLeft':
@@ -205,11 +211,12 @@ Matter.Events.on(runner, 'afterTick', (e) => {
     })
   }
 
-  for (let player of players) {
+  for (let [index, player] of players.entries()) {
     player.friction = 0
     for (let platform of [ground, ...platforms]) {
       const doesCollide = Matter.SAT.collides(platform, player)
       if (doesCollide && ((platform.position.y - 2.5) > (player.position.y + 4.9))) {
+        playersInput[index].usedDoubleJump = false
         player.friction = 1
         break;
       }
