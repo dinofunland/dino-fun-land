@@ -233,7 +233,7 @@ Matter.Events.on(runner, 'afterTick', (e) => {
     if(!isThirdIteration) continue
 
     // TODO make them come back
-    var px = 1 + 0 * Math.sin(engine.timing.timestamp * 0.0003);
+    var px = Math.sin(engine.timing.timestamp * 0.003) * 2;
     Matter.Body.setVelocity(value, { x: px, y: value.velocity.y });
     Matter.Body.setPosition(value, { x: value.position.x + px, y: value.position.y });
   }
