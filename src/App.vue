@@ -229,7 +229,7 @@ Matter.Events.on(runner, 'afterTick', (e) => {
   }
   
   for(let [index, value] of platforms.entries()) {
-    var isThirdIteration = (index + 1) % 3 === 0;
+    var isThirdIteration = (index + 1) % 4 === 0;
     if(!isThirdIteration) continue
 
     var px = 1 + 0 * Math.sin(engine.timing.timestamp * 0.0003);
