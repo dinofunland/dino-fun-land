@@ -134,17 +134,25 @@ onKeyDown(['a', 'A', 'd', 'D', 'w', 'W', 'ArrowLeft', 'ArrowRight', 'ArrowUp', '
       playersInput[1].right = true
       break;
     case 'ArrowUp':
-      const playerJumpPower2 = playersInput[1].shift ? powerJump + 1 : powerJump;
+      const playerJumpPower2 = playersInput[0].shift ? powerJump + 1 : powerJump;
       const player2 = players[1]
+      let doesCollide2;
+      const jump2 = () => {
+        Matter.Body.setVelocity(player2, {
+          x: player2.velocity.x,
+          y: -playerJumpPower2
+        })
+      }
       for (let platform of [ground, ...platforms]) {
-        const doesCollide = Matter.SAT.collides(platform, player2)
-        if (doesCollide) {
-          Matter.Body.setVelocity(player2, {
-            x: player2.velocity.x,
-            y: -playerJumpPower2
-          })
+        doesCollide2 = Matter.SAT.collides(platform, player2)
+        if (doesCollide2) {
+          jump2()
           break;
         }
+      }
+      if(!doesCollide2 && !playersInput[1].usedDoubleJump) {
+        jump2()
+        playersInput[1].usedDoubleJump = true
       }
       break;
     case 'ShiftRight':
@@ -179,7 +187,7 @@ onKeyUp(['a', 'A', 'd', 'D', 'ArrowLeft', 'ArrowRight', 'Shift'], (e) => {
   }
 })
 
-Matter.Events.on(runner, 'afterTick', (e) => {
+Matter.Events.on(runner, 'beforeTick', (e) => {
   const power = 2;
   const playerOne = players[0]
   const playerInputOne = playersInput[0]
