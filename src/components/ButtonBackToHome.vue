@@ -7,7 +7,7 @@
     position: fixed;
     top: 10px;
     left: 10px;
-    background: #8c3f5d;
+    background: #964253;
     padding: 10px;
     border-radius: 10px;
 }
