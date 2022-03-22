@@ -1,8 +1,8 @@
 <template>
   <div class="container">
       <h1 class="title">DINO FUN LAND</h1>
-      <router-link to="/dino-jump">Go To Dino Jump</router-link>
-      <router-link to="/dino-jump-demo">Go To Dino Jump Demo</router-link>
+      <router-link to="/dino-jump">Go To Dino Jump &#8594</router-link>
+      <!--<router-link to="/dino-jump-demo">Go To Dino Jump Demo &#8594</router-link>-->
   </div>
 </template>
 <script setup lang="ts">

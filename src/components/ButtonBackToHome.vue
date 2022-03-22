@@ -1,5 +1,5 @@
 <template>
-    <router-link to="/" class="button">Home</router-link>
+    <router-link to="/" class="button">&#8592 Home</router-link>
 </template>
 <script setup lang="ts"></script>
 <style scoped>
@@ -7,7 +7,7 @@
     position: fixed;
     top: 10px;
     left: 10px;
-    background: #39c8f3;
+    background: #8c3f5d;
     padding: 10px;
     border-radius: 10px;
 }

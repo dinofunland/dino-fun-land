@@ -1,5 +1,18 @@
+/* ref colors: https://lospec.com/palette-list/pear36 */
+
 html,
 body {
   margin: 0;
   font-family: Monospace;
+  background-color: #3e2347;
+  color: #ffe478;
+}
+
+a {
+  color: #ffe478;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #ffb570;
 }
