@@ -5,8 +5,8 @@
 <style scoped>
 .button {
     position: fixed;
-    bottom: 10px;
-    right: 10px;
+    top: 10px;
+    left: 10px;
     background: #39c8f3;
     padding: 10px;
     border-radius: 10px;
