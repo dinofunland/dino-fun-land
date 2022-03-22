@@ -10,7 +10,8 @@
   "dependencies": {
     "@vueuse/core": "^7.7.0",
     "matter-js": "^0.18.0",
-    "vue": "^3.2.25"
+    "vue": "^3.2.25",
+    "vue-router": "^4.0.14"
   },
   "devDependencies": {
     "@types/matter-js": "^0.17.7",
