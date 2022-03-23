@@ -9,7 +9,8 @@
 </script>
 <style>
 .title {
-  font-size: 3rem;
+  font-size: clamp(3rem, 10vw, 10rem);
+  text-shadow: 7px 7px #473b78;
 }
 .container {
     width: 100vw;
@@ -23,5 +24,12 @@
 .link {
     border: 1px solid;
     padding: 10px;
+    transform: scale(2)
+}
+
+@media screen and (max-width: 8000px) {
+  .title {
+    text-shadow: 5px 5px #473b78;
+  }
 }
 </style>
