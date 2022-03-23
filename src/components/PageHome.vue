@@ -9,7 +9,7 @@
 </script>
 <style>
 .title {
-  font-size: clamp(3rem, 10vw, 10rem);
+  font-size: clamp(3rem, 5vw, 9rem);
   text-shadow: 7px 7px #5a265e;
 }
 .container {

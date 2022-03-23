@@ -1,9 +1,16 @@
 /* ref colors: https://lospec.com/palette-list/pear36 */
 
+@font-face {
+  font-family: 'press-start';
+  src: url('assets/fonts/press-start/prstartk.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
 html,
 body {
   margin: 0;
-  font-family: Monospace;
+  font-family: 'press-start';
   color: #ffe478;
 }
 
