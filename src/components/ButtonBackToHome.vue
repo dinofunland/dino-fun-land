@@ -7,8 +7,9 @@
     position: fixed;
     top: 10px;
     left: 10px;
-    background: #964253;
     padding: 10px;
-    border-radius: 10px;
+    border: 1px solid;
+    padding: 10px;
+    background-color: #3e2347;
 }
 </style>

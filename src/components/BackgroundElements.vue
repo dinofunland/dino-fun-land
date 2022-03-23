@@ -52,7 +52,7 @@
 }
 
 .element6 {
-    top: -140px;
-    right: -160px;
+    top: -160px;
+    right: -180px;
 }
 </style>
