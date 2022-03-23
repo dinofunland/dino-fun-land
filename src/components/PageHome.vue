@@ -10,7 +10,7 @@
 <style>
 .title {
   font-size: clamp(3rem, 10vw, 10rem);
-  text-shadow: 7px 7px #473b78;
+  text-shadow: 7px 7px #5a265e;
 }
 .container {
     width: 100vw;
@@ -29,7 +29,7 @@
 
 @media screen and (max-width: 8000px) {
   .title {
-    text-shadow: 5px 5px #473b78;
+    text-shadow: 5px 5px #5a265e;
   }
 }
 </style>
