@@ -20,7 +20,6 @@ const props = defineProps({
 .ranking-list-item {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
-    max-width: 45ch;
     word-wrap: break-word;
     overflow: hidden;
     font-size: 1.2rem;
