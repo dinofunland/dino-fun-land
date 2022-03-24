@@ -7,12 +7,15 @@
   font-style: normal;
 }
 
-html,
+html {
+  background-color: #3e2347;
+  font-size: 10px;
+  color: #ffe478;
+  font-family: 'press-start';
+}
+
 body {
   margin: 0;
-  font-family: 'press-start';
-  color: #ffe478;
-  font-size: 10px;
 }
 
 a {

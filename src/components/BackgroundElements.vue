@@ -17,7 +17,6 @@
     top: 0;
     pointer-events: none;
     z-index: -1;
-    background-color: #3e2347;
 }
 .element {
     background-color: #5a265e;
