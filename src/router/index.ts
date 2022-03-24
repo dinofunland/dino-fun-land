@@ -12,6 +12,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../components/PageDinoJump.vue')
     },
     {
+        path: '/dino-jump-ranking',
+        name: 'PageDinoJumpRanking',
+        component: () => import('../components/PageDinoJumpRanking.vue')
+    },
+    {
         path: '/dino-jump-demo',
         name: 'PageDinoJumpDemo',
         component: () => import('../components/PageDinoJumpDemo.vue')
