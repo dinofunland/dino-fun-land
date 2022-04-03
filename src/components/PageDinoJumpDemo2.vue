@@ -5,6 +5,7 @@
         <div>d pressed: {{ d }}</div>
         <div>space pressed: {{ space }}</div>
         <div>isGrounded: {{ isGrounded }}</div>
+        <div>player velocity y {{ player.velocity.y.toFixed(2) }}</div>
     </div>
 </template>
 <script setup lang="ts">
@@ -165,6 +166,7 @@ onUnmounted(() => {
     top: 0;
     right: 0;
     background-color: blueviolet;
+    width: 230px;
 }
 .state > div {
     font-size: 10px;
