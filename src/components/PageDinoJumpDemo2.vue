@@ -58,7 +58,6 @@ Matter.Events.on(runner.value, 'beforeTick', (e) => {
 })
 
 watch(space, (v) => {
-    console.log(v)
     if (!v) {
         Matter.Body.setVelocity(player.value, {
             x: player.value.velocity.x,
