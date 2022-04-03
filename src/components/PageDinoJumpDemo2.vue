@@ -21,17 +21,51 @@ const runner = ref<Matter.Runner>(Matter.Runner.create())
 const player = ref<Matter.Body>(Matter.Bodies.rectangle(400, 200, 4, 10, {
     friction: 0.9,
     inertia: Infinity,
-    label: 'player'
+    label: 'player',
+    collisionFilter: {
+      category: 2,
+      mask: 1
+    }
 }))
 const isGrounded = ref<boolean>(false)
+
+const createPlatform = (x: number, y: number): Matter.Body => {
+  const body = Matter.Bodies.rectangle(x, y, 40, 5, {
+    isStatic: true,
+    collisionFilter: {
+      category: 1
+    },
+    render: {
+      fillStyle: 'green'
+    }
+  })
+  return body
+}
+
+const getRndInteger = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+const generatePlatforms = (count: number): Matter.Body[] => {
+  const bodies: Matter.Body[] = []
+
+  for (let i = 0; i < count; i++) {
+    bodies.push(createPlatform(getRndInteger(300, 400), -i * 35 + 240))
+  }
+
+  return bodies
+}
 
 // run the engine
 Matter.Runner.run(runner.value, engine.value);
 
-const ground = Matter.Bodies.rectangle(400, 610, 810, 60, { isStatic: true, label: 'floor' });
+const ground = Matter.Bodies.rectangle(200, 300, 810, 60, { isStatic: true, label: 'floor' });
+
+const platforms = generatePlatforms(100)
 
 // add all of the bodies to the world
 Matter.Composite.add(engine.value.world, [ground, player.value]);
+Matter.Composite.add(engine.value.world, platforms);
 
 Matter.Events.on(runner.value, 'beforeTick', (e) => {
     if (a.value != d.value) {
@@ -47,12 +81,22 @@ Matter.Events.on(runner.value, 'beforeTick', (e) => {
                 y: player.value.velocity.y
             })
         }
+    }  
+    if(player.value.velocity.y < 0) {
+      player.value.collisionFilter.mask = 0
+    } else {
+      player.value.collisionFilter.mask = 1
     }
+
     isGrounded.value = Matter.SAT.collides(player.value, ground)?.collided || false
+    for(let platform of platforms) {
+        if(isGrounded.value) break;
+        isGrounded.value = Matter.SAT.collides(player.value, platform)?.collided || false
+    }
     if (isGrounded.value && space.value) {
         Matter.Body.setVelocity(player.value, {
             x: player.value.velocity.x,
-            y: -4
+            y: -5
         })
     }
 })
@@ -64,9 +108,6 @@ watch(space, (v) => {
             y: player.value.velocity.y / 2
         })
     }
-})
-
-Matter.Events.on(engine.value, 'collisionActive', (e) => {
 })
 
 onMounted(() => {
@@ -85,14 +126,14 @@ onMounted(() => {
     // run the renderer
     Matter.Render.run(render.value);
 
-    /*
-      Matter.Events.on(engine, 'afterUpdate', () => {
-        Matter.Render.lookAt(render, players, {
-          x: 100,
-          y: 200
-        });
-      })
-      */
+    Matter.Events.on(engine.value, 'afterUpdate', () => {
+        if (render.value) {
+            Matter.Render.lookAt(render.value, player.value, {
+                x: 200,
+                y: 400
+            });
+        }
+    })
 
     useResizeObserver(gameCanvas.value, (entries) => {
         if (gameCanvas.value) {

@@ -23,7 +23,7 @@ const routes: Array<RouteRecordRaw> = [
     },
     {
         path: '/dino-jump-demo-2',
-        name: 'PageDinoJumpDemo',
+        name: 'PageDinoJumpDemo2',
         component: () => import('../components/PageDinoJumpDemo2.vue')
     }
 ]
