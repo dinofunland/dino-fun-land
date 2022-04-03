@@ -20,6 +20,11 @@ const routes: Array<RouteRecordRaw> = [
         path: '/dino-jump-demo',
         name: 'PageDinoJumpDemo',
         component: () => import('../components/PageDinoJumpDemo.vue')
+    },
+    {
+        path: '/dino-jump-demo-2',
+        name: 'PageDinoJumpDemo',
+        component: () => import('../components/PageDinoJumpDemo2.vue')
     }
 ]
 
