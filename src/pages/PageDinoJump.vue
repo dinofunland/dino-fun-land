@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue';
 
-const BackToHome = defineAsyncComponent(() => import('./ButtonBackToHome.vue'))
+const BackToHome = defineAsyncComponent(() => import('../components/ButtonBackToHome.vue'))
 </script>
 <style scoped>
 .container {

@@ -7,7 +7,7 @@ import * as Matter from 'matter-js'
 import { defineAsyncComponent, onMounted, ref } from 'vue';
 import { onKeyDown, onKeyUp, useResizeObserver } from '@vueuse/core'
 
-const BackToHome = defineAsyncComponent(() => import('./ButtonBackToHome.vue'))
+const BackToHome = defineAsyncComponent(() => import('../components/ButtonBackToHome.vue'))
 
 const platformCategory = 1
 const playerCategory = 2

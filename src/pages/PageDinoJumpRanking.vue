@@ -14,8 +14,8 @@
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue';
-const BackToHome = defineAsyncComponent(() => import('./ButtonBackToHome.vue'))
-const RankingList = defineAsyncComponent(() => import('./RankingList.vue'))
+const BackToHome = defineAsyncComponent(() => import('../components/ButtonBackToHome.vue'))
+const RankingList = defineAsyncComponent(() => import('../components/RankingList.vue'))
 </script>
 <style scoped>
 .page {
