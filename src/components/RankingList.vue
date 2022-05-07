@@ -41,7 +41,7 @@ const loadRankList = async (playerCount: number) => {
                         console.log('doc', document)
                         const players = document.fields?.players?.arrayValue?.values?.map((obj: any) => {
                             return obj?.stringValue
-                        })
+                        })?.sort()
                         return {
                             id: document?.name,
                             rank: index + 1,
