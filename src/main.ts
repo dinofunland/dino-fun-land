@@ -11,8 +11,4 @@ async function bootstrap() {
     app.mount('#app')
 }
 
-async function start() {
-    await bootstrap()
-}
-
-start()
+bootstrap()
