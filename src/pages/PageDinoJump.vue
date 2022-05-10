@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <iframe
-            src="https://practical-borg-def877.netlify.app/"
+            src="https://dino-fun-land-webgl.netlify.app/"
             title="Dino Jump Game"
             allowfullscreen
             scrolling="no"
